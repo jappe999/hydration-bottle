@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: OpenSans-Bold;
+  src: url('../fonts/Open_Sans/OpenSans-Bold.ttf');
+}
+
+
+@variants hover,
+focus {
+  .transition {
+    transition: all 0.1s ease-in-out;
+  }
+
+  .transition-slow {
+    transition: all 0.3s ease-in-out;
+  }
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s;
+}
+
+.page-enter,
+.page-leave-active {
+  opacity: 0;
+}

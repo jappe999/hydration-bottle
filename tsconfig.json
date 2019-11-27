@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2015",
+    "declaration": false,
+    "removeComments": true,
+    "noLib": false,
+    "lib": ["es2015", "es2015.iterable", "dom"],
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": false,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "~/*": ["client/*"]
+    },
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "@types/jest"
+    ]
+  },
+  "include": [
+    "server/**/*",
+    "client/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
