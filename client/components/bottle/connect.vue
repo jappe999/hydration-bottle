@@ -10,7 +10,7 @@
           <div
             v-for="[field, errors] in Object.entries(bottle.errors.all())"
             :key="field"
-            class="px-3"
+            class="mb-2"
           >
             <small v-for="error in errors" :key="error">
               {{ error }}
@@ -30,6 +30,10 @@
         </form>
       </app-card-content>
     </app-card>
+
+    <ul class="h-96 overflow-y-auto text-white">
+      <li v-for="line in output" :key="line">{{ line }}</li>
+    </ul>
   </div>
 </template>
 
@@ -48,12 +52,62 @@ import { Form } from '../../plugins'
 export default class AppBottleConnnect extends Vue {
   $auth: any
 
+  output = []
+
   bottle = new Form({
     code: '',
     name: '',
   })
 
-  async connect() {
+  log(value: string) {
+    this.output.push(value)
+  }
+
+  handleChange(event) {
+    const value = event.target.value
+    const batteryLevel = value.getUint8(0)
+    this.log('> Battery Level is ' + batteryLevel + '%')
+  }
+
+  connect() {
+    if ('bluetooth' in navigator) {
+      // @ts-ignore
+      navigator.bluetooth
+        .requestDevice({
+          filters: [
+            {
+              namePrefix: this.bottle.data().code,
+            },
+          ],
+          optionalServices: [0x180f, 0x181d],
+        })
+        .then(device => {
+          this.log(`Connection with ${device.name} successful.`)
+          return device.gatt.connect()
+        })
+        .then(server => server.getPrimaryService(0x180f))
+        .then(service => {
+          return service.getCharacteristic(0x2a19)
+        })
+        .then(characteristic => characteristic.startNotifications())
+        .then(characteristic => {
+          characteristic.addEventListener(
+            'characteristicvaluechanged',
+            this.handleChange.bind(this),
+          )
+        })
+        .catch(e => {
+          this.log('Error' + JSON.stringify(e.toString()))
+        })
+    } else {
+      this.bottle.errors.set(
+        'Bluetooth',
+        'Your device does not support bluetooth. Please try again on another device.',
+      )
+    }
+  }
+
+  async saveDevice() {
     this.bottle.startProcessing()
 
     try {

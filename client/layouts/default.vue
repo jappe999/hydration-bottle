@@ -5,64 +5,67 @@
     <app-splash-screen v-if="loading" @loaded="loaded" />
 
     <template v-else>
-      <div
-        v-if="$auth.loggedIn"
-        :class="{
-          'sidebar w-full max-w-sm justify-between bg-gray-800': $auth.loggedIn,
-          'sidebar--open': $auth.loggedIn && menuOpen,
-        }"
-        class="h-screen w-full fixed left-0 top-0 p-4 z-50"
-      >
+      <transition name="menu">
         <div
-          class="h-full w-full flex flex-col justify-between items-center mr-8 p-4 text-center overflow-y-auto"
+          v-if="$auth.loggedIn && menuOpen"
+          @click.self="toggleMenu(false)"
+          class="menu-wrapper h-screen w-full fixed left-0 top-0 z-50"
         >
-          <div class="w-full">
-            <app-button
-              @click.native="toggleMenu(false)"
-              class="-mt-4 -ml-4 mb-8 py-6 shadow-none rounded-xl"
-              bg="gray-800"
-              bg-hover="gray-900"
+          <div
+            class="menu h-full w-full max-w-sm justify-between bg-gray-800 p-4"
+          >
+            <div
+              class="h-full w-full flex flex-col justify-between items-center mr-8 p-4 text-center overflow-y-auto"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                class="h-4 fill-current"
-              >
-                <path
-                  d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
-                />
-              </svg>
-            </app-button>
+              <div class="w-full">
+                <app-button
+                  @click.native="toggleMenu(false)"
+                  class="-mt-4 -ml-4 mb-8 py-6 shadow-none rounded-xl"
+                  bg="gray-800"
+                  bg-hover="gray-900"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    class="h-4 fill-current"
+                  >
+                    <path
+                      d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                    />
+                  </svg>
+                </app-button>
 
-            <div class="flex flex-col items-center">
-              <img src="~/static/icon.png" class="w-24" alt="Logo" />
-              <h2 class="mt-4 text-3xl text-white font-bold">
-                Hydration Bottle
-              </h2>
+                <div class="flex flex-col items-center">
+                  <img src="~/static/icon.png" class="w-24" alt="Logo" />
+                  <h2 class="mt-4 text-3xl text-white font-bold">
+                    Hydration Bottle
+                  </h2>
+                </div>
+              </div>
+
+              <div class="w-full">
+                <p>Some project info.</p>
+              </div>
+
+              <div class="w-full mt-8">
+                <app-button
+                  v-if="$auth.loggedIn"
+                  @click.native="logout"
+                  class="w-full"
+                >
+                  Logout
+                </app-button>
+              </div>
             </div>
           </div>
-
-          <div class="w-full">
-            <p>Some project info.</p>
-          </div>
-
-          <div class="w-full mt-8">
-            <app-button
-              v-if="$auth.loggedIn"
-              @click.native="logout"
-              class="w-full"
-            >
-              Logout
-            </app-button>
-          </div>
         </div>
-      </div>
+      </transition>
 
       <div class="h-full w-full flex flex-col justify-start">
         <div v-if="$auth.loggedIn" class="flex justify-center items-start p-4">
           <div class="w-2/3">
             <app-button
-              @click.native="toggleMenu(null)"
+              @click.native="toggleMenu(null, 1)"
               class="py-6"
               bg="gray-800"
               bg-hover="gray-900"
@@ -121,8 +124,10 @@ export default class DefaultLayout extends Vue {
     this.loading = false
   }
 
-  toggleMenu(state: boolean = null) {
-    this.menuOpen = state === null ? !this.menuOpen : state
+  toggleMenu(state: boolean = null, timeout = 0) {
+    setTimeout(() => {
+      this.menuOpen = state === null ? !this.menuOpen : state
+    }, timeout)
   }
 
   logout() {
@@ -132,13 +137,28 @@ export default class DefaultLayout extends Vue {
 }
 </script>
 
-<style lang="postcss">
-.sidebar {
-  transform: translateX(calc(-100% - 2rem));
-  transition: 0.2s;
+<style scoped>
+.menu-enter-active,
+.menu-enter-active > div,
+.menu-leave-active,
+.menu-leave-active > div {
+  transition: all 0.2s;
 }
 
-.sidebar--open {
-  transform: translateX(0);
+.menu-enter,
+.menu-leave-active {
+  opacity: 0;
+}
+
+.menu-enter > div {
+  transform: translateX(calc(-100% - 2rem));
+}
+
+.menu-leave-active > div {
+  transform: translateX(calc(-100% - 2rem));
+}
+
+.menu-wrapper {
+  background-color: rgba(26, 32, 44, 0.75);
 }
 </style>

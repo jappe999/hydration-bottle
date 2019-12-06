@@ -44,7 +44,6 @@ const config: Configuration = {
     '~/plugins/SelectOnFocus',
     '~/plugins/vue-click-outside',
     '~/plugins/axios',
-    { src: '~/plugins/socket.io', ssr: false },
   ],
   /*
    ** Nuxt.js modules
