@@ -1,4 +1,4 @@
-import { GetterTree, MutationTree, ActionTree } from 'vuex'
+import { GetterTree, MutationTree, ActionTree } from 'vuex/types/index'
 import { BottleView } from '~/models/Bottle'
 import * as types from './mutation-types'
 
@@ -20,6 +20,7 @@ const getQuery = (options: IQueryOptions = {}): string => {
 }
 
 export const state = () => ({
+  currentBottleId: '' as string,
   bottles: {} as { [key: string]: BottleView },
 })
 
@@ -27,7 +28,7 @@ export type state = ReturnType<typeof state>
 
 export const getters: GetterTree<state, state> = {
   bottles: ({ bottles }: state) => bottles,
-  bottle: ({ bottles }: state) => (id: string) => bottles[id]
+  bottle: ({ bottles, currentBottleId: id }: state) => bottles[id] || {}
 }
 
 export const mutations: MutationTree<state> = {
@@ -42,10 +43,13 @@ export const mutations: MutationTree<state> = {
       ...state.bottles[bottle.id],
       ...bottle
     }
+
+    state.currentBottleId = bottle.id
   },
 
   [types.ADD_BOTTLE](state: state, bottle: BottleView) {
     state.bottles[bottle.id] = bottle
+    state.currentBottleId = bottle.id
   },
 
   [types.UPDATE_BOTTLE](state: state, bottle: BottleView) {
@@ -57,6 +61,7 @@ export const mutations: MutationTree<state> = {
 
   [types.REMOVE_BOTTLE](state: state, bottle: BottleView) {
     delete state.bottles[bottle.id]
+    state.currentBottleId = ''
   },
 }
 
