@@ -11,13 +11,11 @@
           @click.self="toggleMenu(false)"
           class="menu-wrapper h-screen w-full fixed left-0 top-0 z-50"
         >
-          <div
-            class="menu h-full w-full max-w-sm justify-between bg-gray-800 p-4"
-          >
+          <div class="menu h-full w-full max-w-sm justify-between bg-gray-800">
             <div
-              class="h-full w-full flex flex-col justify-between items-center mr-8 p-4 text-center overflow-y-auto"
+              class="h-full w-full flex flex-col justify-between items-center mr-8 text-center overflow-y-auto"
             >
-              <div class="w-full">
+              <div class="w-full p-8">
                 <app-button
                   @click.native="toggleMenu(false)"
                   class="-mt-4 -ml-4 mb-8 py-6 shadow-none rounded-xl"
@@ -44,10 +42,29 @@
               </div>
 
               <div class="w-full">
-                <p>Some project info.</p>
+                <ul class="py-4 my-4 border- border-gray-700">
+                  <li class="w-full flex ">
+                    <nuxt-link
+                      to="/"
+                      class="w-full p-3 font-semibold bg-gray-800 hover:bg-gray-900 focus:bg-gray-900"
+                      :class="{ 'bg-gray-900': $route.path == '/' }"
+                      >Home</nuxt-link
+                    >
+                  </li>
+                  <li class="w-full flex ">
+                    <nuxt-link
+                      to="/device/setup"
+                      class="w-full p-3 font-semibold bg-gray-800 hover:bg-gray-900 focus:bg-gray-900"
+                      :class="{
+                        'bg-gray-900': $route.path == '/device/setup',
+                      }"
+                      >Set up a device</nuxt-link
+                    >
+                  </li>
+                </ul>
               </div>
 
-              <div class="w-full mt-8">
+              <div class="w-full mt-8 p-8">
                 <app-button
                   v-if="$auth.loggedIn"
                   @click.native="logout"

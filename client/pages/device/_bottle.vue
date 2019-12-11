@@ -1,9 +1,10 @@
 <template>
   <app-card-content>
-    <div class="text-center">
+    <div class="text-center mb-4">
       <h1 class="text-3xl font-bold">{{ bottle.name }}</h1>
-      <small>Connected</small>
+      <small>{{ bottle.code }}</small>
     </div>
+
     <app-card>
       <app-card-content></app-card-content>
     </app-card>

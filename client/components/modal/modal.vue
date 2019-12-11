@@ -42,7 +42,7 @@
 
         <app-card-content>
           <div class="flex justify-end">
-            <app-button v-if="cancel" @click.native="close">
+            <app-button v-if="cancelText" @click.native="close">
               {{ cancelText }}
             </app-button>
             <app-button v-if="successText" @click.native="success" class="ml-2">
