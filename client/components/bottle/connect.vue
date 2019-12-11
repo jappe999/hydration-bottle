@@ -31,9 +31,7 @@
       </app-card-content>
     </app-card>
 
-    <ul class="h-96 overflow-y-auto text-white">
-      <li v-for="line in output" :key="line">{{ line }}</li>
-    </ul>
+    <app-debug :output="debugOutput" />
   </div>
 </template>
 
@@ -43,6 +41,7 @@ import { Form } from '../../plugins'
 
 @Component({
   components: {
+    AppDebug: () => import('~/components/debug.vue'),
     AppCard: () => import('~/components/card/card.vue'),
     AppCardContent: () => import('~/components/card/card-content.vue'),
     AppInput: () => import('~/components/form/input.vue'),
@@ -52,7 +51,7 @@ import { Form } from '../../plugins'
 export default class AppBottleConnnect extends Vue {
   $auth: any
 
-  output = []
+  debugOutput: any[] = []
 
   bottle = new Form({
     code: '',
@@ -60,13 +59,13 @@ export default class AppBottleConnnect extends Vue {
   })
 
   log(value: string) {
-    this.output.push(value)
+    this.debugOutput.push(value)
   }
 
   handleChange(event) {
     const value = event.target.value
-    const batteryLevel = value.getUint8(0)
-    this.log('> Battery Level is ' + batteryLevel + '%')
+    const level = value.getUint8(0)
+    this.log('> Pressure is ' + level)
   }
 
   connect() {
@@ -85,9 +84,9 @@ export default class AppBottleConnnect extends Vue {
           this.log(`Connection with ${device.name} successful.`)
           return device.gatt.connect()
         })
-        .then(server => server.getPrimaryService(0x180f))
+        .then(server => server.getPrimaryService(0x181d))
         .then(service => {
-          return service.getCharacteristic(0x2a19)
+          return service.getCharacteristic(0x2a98)
         })
         .then(characteristic => characteristic.startNotifications())
         .then(characteristic => {
