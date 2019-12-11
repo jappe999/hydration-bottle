@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core'
+import { ValidationPipe } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import consola from 'consola'
 import pkg from '../../package.json'
@@ -30,6 +31,9 @@ async function bootstrap() {
   )
 
   app.useGlobalFilters(new NuxtFilter(nuxt))
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+  }))
 
   await app.listen(port, () => {
     consola.ready({

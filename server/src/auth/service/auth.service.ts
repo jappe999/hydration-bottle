@@ -24,12 +24,12 @@ export class AuthService {
     const user = await this.usersService.findOne({ where: { username } })
 
     if (user) {
-      if (
-        user.loginTime &&
-        user.loginTime.getTime() + 60 * 60 * 1000 > Date.now()
-      ) {
-        return AuthService.ERROR_USER_LOGGED_IN
-      }
+      // if (
+      //   user.loginTime &&
+      //   user.loginTime.getTime() + 60 * 60 * 1000 > Date.now()
+      // ) {
+      //   return AuthService.ERROR_USER_LOGGED_IN
+      // }
 
       if (await this.validatePassword(user, pass)) {
         const { password, ...result } = user

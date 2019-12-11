@@ -37,7 +37,10 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import { Mutation } from 'vuex-class'
 import { Form } from '../../plugins'
+import { BottleCreate } from '~/models/Bottle'
+import * as types from '~/store/mutation-types'
 
 @Component({
   components: {
@@ -53,10 +56,12 @@ export default class AppBottleConnnect extends Vue {
 
   debugOutput: any[] = []
 
-  bottle = new Form({
+  bottle = new Form<BottleCreate>({
     code: '',
     name: '',
   })
+
+  @Mutation(`bottles/${types.ADD_BOTTLE}`) addBottle: (bottle) => void
 
   log(value: string) {
     this.debugOutput.push(value)
@@ -81,6 +86,7 @@ export default class AppBottleConnnect extends Vue {
           optionalServices: [0x180f, 0x181d],
         })
         .then(device => {
+          this.saveDevice()
           this.log(`Connection with ${device.name} successful.`)
           return device.gatt.connect()
         })
@@ -110,8 +116,9 @@ export default class AppBottleConnnect extends Vue {
     this.bottle.startProcessing()
 
     try {
-      await this.bottle.post('/api/bottle')
-      this.$router.push('/')
+      const { data: bottle } = await this.bottle.post('/bottles')
+      this.addBottle(bottle)
+      this.$router.push(`/device/${bottle.id}`)
     } catch ({ response }) {
       if (response.status === 400) {
         this.bottle.errors.set('name', response.data.message)

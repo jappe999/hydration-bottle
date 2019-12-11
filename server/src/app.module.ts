@@ -5,6 +5,7 @@ import { getMetadataArgsStorage } from 'typeorm'
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
+import { BottlesModule } from './bottles/bottles.module'
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AuthModule } from './auth/auth.module'
     }),
     UsersModule,
     AuthModule,
+    BottlesModule
   ],
 })
 export class AppModule { }

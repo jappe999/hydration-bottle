@@ -6,7 +6,7 @@ export interface IBottle {
     name: string
 }
 
-export class BottleSignIn extends Model implements IBottle {
+export class BottleCreate extends Model implements IBottle {
     code!: string
     name!: string
 }
