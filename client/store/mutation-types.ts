@@ -3,3 +3,6 @@ export const FETCH_BOTTLE = 'FETCH_BOTTLE'
 export const ADD_BOTTLE = 'ADD_BOTTLE'
 export const UPDATE_BOTTLE = 'UPDATE_BOTTLE'
 export const REMOVE_BOTTLE = 'REMOVE_BOTTLE'
+
+export const SET_SERVER = 'SET_SERVER'
+export const UNSET_SERVER = 'UNSET_SERVER'

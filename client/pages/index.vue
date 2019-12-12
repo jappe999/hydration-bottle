@@ -47,6 +47,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { Getter, Action } from 'vuex-class'
 import { BottleView } from '../models/Bottle'
+import { connect, watch } from '../plugins/bluetooth'
 
 @Component({
   components: {
@@ -76,7 +77,14 @@ export default class PageIndex extends Vue {
   ) => Promise<BottleView[]>
 
   mounted() {
-    this.fetchBottles()
+    this.fetchBottles().then(bottles =>
+      bottles.forEach(async bottle => {
+        const server = await connect(bottle.code)
+        watch(0x181d, 0x2a98, e => {
+          alert(e.target.value.getUInt8(0) / 100)
+        })
+      }),
+    )
 
     if (!('bluetooth' in navigator)) {
       this.toggleModal(true)
