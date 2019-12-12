@@ -53,8 +53,9 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { Getter, Action } from 'vuex-class'
-import { BottleView } from '../models/Bottle'
-import { connect, watch } from '../plugins/bluetooth'
+import { BottleView } from '~/models/Bottle'
+import { MeasurementCreate, MeasurementView } from '~/models/Measurement'
+import { connect, watch } from '~/plugins/bluetooth'
 
 @Component({
   components: {
@@ -83,19 +84,20 @@ export default class PageIndex extends Vue {
     options?: any,
   ) => Promise<BottleView[]>
 
-  async mounted() {
-    const bottles = await this.fetchBottles()
+  @Action('measurements/storeMeasurement') storeMeasurement: (
+    measurement: MeasurementCreate,
+  ) => Promise<MeasurementView>
 
-    if (!('bluetooth' in navigator)) {
-      this.toggleModal(true)
-    } else {
+  mounted() {
+    this.fetchBottles().then(bottles =>
       bottles.forEach(async bottle => {
         const server = await connect(bottle.code)
         watch(0x181d, 0x2a98, e => {
-          alert(e.target.value.getUInt8(0) / 100)
+          const weight = e.target.value.getUInt8(0) * 10
+          this.storeMeasurement({ bottleId: bottle.id, weight })
         })
-      })
-    }
+      }),
+    )
   }
 
   toggleModal(state = null) {
