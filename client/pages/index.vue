@@ -76,12 +76,17 @@ export default class PageIndex extends Vue {
     options?: any,
   ) => Promise<BottleView[]>
 
+  @Action('measurements/storeMeasurement') storeMeasurement: (
+    measurement: MeasurementCreate,
+  ) => Promise<MeasurementView>
+
   mounted() {
     this.fetchBottles().then(bottles =>
       bottles.forEach(async bottle => {
         const server = await connect(bottle.code)
         watch(0x181d, 0x2a98, e => {
-          alert(e.target.value.getUInt8(0) / 100)
+          const weight = e.target.value.getUInt8(0) * 10
+          this.storeMeasurement({ bottleId: bottle.id, weight })
         })
       }),
     )

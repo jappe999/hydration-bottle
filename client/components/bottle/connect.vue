@@ -90,8 +90,6 @@ export default class AppBottleConnnect extends Vue {
           code: server.device.name,
         })
         this.saveBottle()
-
-        watch(0x181d, 0x2a98, this.handleChange.bind(this))
       } catch (e) {
         this.log(e)
       }

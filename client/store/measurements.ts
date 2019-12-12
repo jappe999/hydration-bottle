@@ -1,6 +1,7 @@
 import { GetterTree, MutationTree, ActionTree } from 'vuex/types/index'
 import { MeasurementView } from '~/models/Measurement'
 import * as types from './mutation-types'
+import { MeasurementCreate } from '~/models/Measurement'
 
 interface IQueryOptions {
   skip?: number
@@ -48,21 +49,9 @@ export const mutations: MutationTree<state> = {
     state.currentMeasurementId = measurement.id
   },
 
-  [types.ADD_BOTTLE](state: state, measurement: MeasurementView) {
+  [types.STORE_MEASUREMENT](state: state, measurement: MeasurementView) {
     state.measurements[measurement.id] = measurement
     state.currentMeasurementId = measurement.id
-  },
-
-  [types.UPDATE_BOTTLE](state: state, measurement: MeasurementView) {
-    state.measurements[measurement.id] = {
-      ...state.measurements[measurement.id],
-      ...measurement,
-    }
-  },
-
-  [types.REMOVE_BOTTLE](state: state, measurement: MeasurementView) {
-    delete state.measurements[measurement.id]
-    state.currentMeasurementId = ''
   },
 }
 
@@ -84,5 +73,14 @@ export const actions: ActionTree<state, state> = {
     }: { data: MeasurementView } = await this.$axios.get(`measurements/${id}`)
     commit(types.FETCH_BOTTLE, measurement)
     return measurement
+  },
+
+  async storeMeasurement({ commit }, measurement: MeasurementCreate) {
+    const { data }: { data: MeasurementView } = await this.$axios.post(
+      `measurements`,
+      measurement,
+    )
+    commit(types.STORE_MEASUREMENT, data)
+    return data
   },
 }

@@ -6,3 +6,5 @@ export const REMOVE_BOTTLE = 'REMOVE_BOTTLE'
 
 export const SET_SERVER = 'SET_SERVER'
 export const UNSET_SERVER = 'UNSET_SERVER'
+
+export const STORE_MEASUREMENT = 'STORE_MEASUREMENT'
