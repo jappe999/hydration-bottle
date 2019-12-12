@@ -37,10 +37,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { Mutation } from 'vuex-class'
-import { Form } from '../../plugins'
+import { Mutation, Action } from 'vuex-class'
 import { BottleCreate } from '~/models/Bottle'
 import * as types from '~/store/mutation-types'
+import { Form } from '../../plugins'
+import { connect, watch } from '~/plugins/bluetooth'
 
 @Component({
   components: {
@@ -52,8 +53,6 @@ import * as types from '~/store/mutation-types'
   },
 })
 export default class AppBottleConnnect extends Vue {
-  $auth: any
-
   debugOutput: any[] = []
 
   bottle = new Form<BottleCreate>({
@@ -63,47 +62,39 @@ export default class AppBottleConnnect extends Vue {
 
   @Mutation(`bottles/${types.ADD_BOTTLE}`) addBottle: (bottle) => void
 
+  @Action('bluetooth/connectToServer') connectToServer: (device) => Promise<any>
+  @Action('bluetooth/watch') watch: (
+    serviceUUID,
+    charUUID,
+    callback,
+  ) => Promise<any>
+
   log(value: string) {
     this.debugOutput.push(value)
   }
 
   handleChange(event) {
     const value = event.target.value
-    const level = value.getUint8(0)
-    this.log('> Pressure is ' + level)
+    const weight = value.getUint8(0) * 10
+    alert('> Weight is ' + weight + ' grams')
   }
 
-  connect() {
+  async connect() {
     if ('bluetooth' in navigator) {
-      // @ts-ignore
-      navigator.bluetooth
-        .requestDevice({
-          filters: [
-            {
-              namePrefix: this.bottle.data().code,
-            },
-          ],
-          optionalServices: [0x180f, 0x181d],
+      try {
+        const server = await connect(this.bottle.data().code)
+        this.log(`Connection with ${server.device.name} successful.`)
+
+        this.bottle.fill({
+          ...this.bottle.data(),
+          code: server.device.name,
         })
-        .then(device => {
-          this.saveDevice()
-          this.log(`Connection with ${device.name} successful.`)
-          return device.gatt.connect()
-        })
-        .then(server => server.getPrimaryService(0x181d))
-        .then(service => {
-          return service.getCharacteristic(0x2a98)
-        })
-        .then(characteristic => characteristic.startNotifications())
-        .then(characteristic => {
-          characteristic.addEventListener(
-            'characteristicvaluechanged',
-            this.handleChange.bind(this),
-          )
-        })
-        .catch(e => {
-          this.log('Error' + JSON.stringify(e.toString()))
-        })
+        this.saveBottle()
+
+        watch(0x181d, 0x2a98, this.handleChange.bind(this))
+      } catch (e) {
+        this.log(e)
+      }
     } else {
       this.bottle.errors.set(
         'Bluetooth',
@@ -112,7 +103,7 @@ export default class AppBottleConnnect extends Vue {
     }
   }
 
-  async saveDevice() {
+  async saveBottle() {
     this.bottle.startProcessing()
 
     try {
