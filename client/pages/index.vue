@@ -6,16 +6,23 @@
 
     <div class="text-center" v-if="bottles.length === 0">
       <p class="mb-6">You haven't set up a device yet.</p>
-      <app-button-link to="/device/setup">
-        Set up a device
-      </app-button-link>
     </div>
 
     <div v-else class="h-full w-full mt-12">
-      <h1 class="text-3xl mb-4">My bottles</h1>
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl mb-4">My bottles</h1>
 
-      <ul class="flex flex-wrap">
-        <li v-for="bottle in bottles" :key="bottle.id" class="w-1/3">
+        <app-button-link to="/device/setup" class="mb-4">
+          Set up a device
+        </app-button-link>
+      </div>
+
+      <ul class="flex flex-wrap -m-2">
+        <li
+          v-for="bottle in bottles"
+          :key="bottle.id"
+          class="w-full md:w-1/2 lg:w-1/3 p-2"
+        >
           <nuxt-link :to="`/device/${bottle.id}`">
             <app-card>
               <app-card-content>
@@ -76,18 +83,18 @@ export default class PageIndex extends Vue {
     options?: any,
   ) => Promise<BottleView[]>
 
-  mounted() {
-    this.fetchBottles().then(bottles =>
+  async mounted() {
+    const bottles = await this.fetchBottles()
+
+    if (!('bluetooth' in navigator)) {
+      this.toggleModal(true)
+    } else {
       bottles.forEach(async bottle => {
         const server = await connect(bottle.code)
         watch(0x181d, 0x2a98, e => {
           alert(e.target.value.getUInt8(0) / 100)
         })
-      }),
-    )
-
-    if (!('bluetooth' in navigator)) {
-      this.toggleModal(true)
+      })
     }
   }
 
