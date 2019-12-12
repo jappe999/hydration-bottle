@@ -46,7 +46,8 @@ export class BottlesController {
                 ...(<Object>options.where),
                 id,
                 user
-            }
+            },
+            relations: ['measurements']
         })
     }
 
