@@ -120,7 +120,11 @@ export default class DevicePage extends Vue {
       const server = await connect(bottle.code)
       await watch(0x181d, 0x2a98, e => {
         const weight = e.target.value.getUint8(0) * 10
-        this.storeMeasurement({ bottleId: bottle.id, weight })
+        this.storeMeasurement({
+          bottleId: bottle.id,
+          weight,
+          timestamp: Date.now(),
+        })
       })
     } catch (e) {
       console.error(e)
