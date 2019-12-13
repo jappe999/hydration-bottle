@@ -84,12 +84,12 @@ export default class PageIndex extends Vue {
     options?: any,
   ) => Promise<BottleView[]>
 
-  @Action('measurements/storeMeasurement') storeMeasurement: (
-    measurement: MeasurementCreate,
-  ) => Promise<MeasurementView>
+  async mounted() {
+    await this.fetchBottles()
 
-  mounted() {
-    this.fetchBottles()
+    if (!('bluetooth' in navigator)) {
+      this.toggleModal(true)
+    }
   }
 
   toggleModal(state = null) {

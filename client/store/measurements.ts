@@ -76,8 +76,10 @@ export const actions: ActionTree<state, state> = {
   },
 
   async storeMeasurement({ commit }, measurement: MeasurementCreate) {
+    const { log } = console
+    log(measurement)
     const { data }: { data: MeasurementView } = await this.$axios.post(
-      `measurements`,
+      'measurements',
       measurement,
     )
     commit(types.STORE_MEASUREMENT, data)
