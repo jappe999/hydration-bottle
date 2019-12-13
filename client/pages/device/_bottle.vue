@@ -61,45 +61,52 @@ export default class DevicePage extends Vue {
       },
     ],
   }
-  dataToday = {
-    labels: [
-      '00:00',
-      '01:00',
-      '02:00',
-      '03:00',
-      '04:00',
-      '05:00',
-      '06:00',
-      '07:00',
-      '08:00',
-      '09:00',
-      '10:00',
-      '11:00',
-      '12:00',
-      '13:00',
-      '14:00',
-      '15:00',
-      '16:00',
-      '17:00',
-      '18:00',
-      '19:00',
-      '20:00',
-      '21:00',
-      '22:00',
-      '23:00',
-    ],
-    datasets: [
-      {
-        label: '',
-        backgroundColor: '#6574CD',
-        data: [],
-      },
-    ],
+
+  get dataToday() {
+    return {
+      labels: [
+        '00:00',
+        '01:00',
+        '02:00',
+        '03:00',
+        '04:00',
+        '05:00',
+        '06:00',
+        '07:00',
+        '08:00',
+        '09:00',
+        '10:00',
+        '11:00',
+        '12:00',
+        '13:00',
+        '14:00',
+        '15:00',
+        '16:00',
+        '17:00',
+        '18:00',
+        '19:00',
+        '20:00',
+        '21:00',
+        '22:00',
+        '23:00',
+      ],
+      datasets: [
+        {
+          label: '',
+          backgroundColor: '#6574CD',
+          data: this.measurements,
+        },
+      ],
+    }
   }
 
   @Getter('bottles/bottle') bottle: (id: string) => BottleView
+  @Getter('measurements/measurements') measurements: MeasurementView[]
 
   @Action('bottles/fetchBottle') fetchBottle: (id: string) => BottleView
+  @Action('measurements/fetchMeasurements') fetchMeasurements: (
+    options?: any,
+  ) => MeasurementView[]
 
   @Action('measurements/storeMeasurement') storeMeasurement: (
     measurement: MeasurementCreate,
@@ -107,15 +114,21 @@ export default class DevicePage extends Vue {
 
   async mounted() {
     const bottle = await this.fetchBottle(this.$route.params.bottle)
-    const server = await connect(bottle.code)
-    await watch(0x181d, 0x2a98, e => {
-      const weight = e.target.value.getUint8(0) * 10
-      this.storeMeasurement({ bottleId: bottle.id, weight })
-    })
+    await this.fetchMeasurements({ bottleId: bottle.id })
+
+    try {
+      const server = await connect(bottle.code)
+      await watch(0x181d, 0x2a98, e => {
+        const weight = e.target.value.getUint8(0) * 10
+        this.storeMeasurement({ bottleId: bottle.id, weight })
+      })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   getRandomInt() {
-    return Math.floor(Math.random() * (5000 - 5 + 1)) + 5
+    return Math.floor(Math.random() * (5 + 1))
   }
 }
 </script>

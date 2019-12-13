@@ -6,14 +6,31 @@ import {
   Delete,
   Param,
   Body,
+  Query,
+  Get,
 } from '@nestjs/common'
 import { MeasurementsService } from '../service/measurements.service'
 import { AuthGuard } from '@nestjs/passport'
 import { MeasurementCreateDto, MeasurementUpdateDto } from '../measurement.dto'
+import { FindManyOptions } from 'typeorm'
 
 @Controller('measurements')
 export class MeasurementsController {
-  constructor(private readonly measurementsService: MeasurementsService) {}
+  constructor(private readonly measurementsService: MeasurementsService) { }
+
+  /**
+   * Add a new measurement to the measurement collection of the bottle.
+   * @param measurement - The measurement to add
+   */
+  @UseGuards(AuthGuard('jwt'))
+  @Get('')
+  fetchAll(@Query() { bottleId }) {
+    return this.measurementsService.findMany({
+      where: {
+        bottleId
+      }
+    })
+  }
 
   /**
    * Add a new measurement to the measurement collection of the bottle.

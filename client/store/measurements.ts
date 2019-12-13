@@ -21,63 +21,38 @@ const getQuery = (options: IQueryOptions = {}): string => {
 }
 
 export const state = () => ({
-  currentMeasurementId: '' as string,
-  measurements: {} as { [key: string]: MeasurementView },
+  measurements: [] as MeasurementView[]
 })
 
 export type state = ReturnType<typeof state>
 
 export const getters: GetterTree<state, state> = {
   measurements: ({ measurements }: state) => measurements,
-  measurement: ({ measurements, currentMeasurementId: id }: state) =>
-    measurements[id] || {},
 }
 
 export const mutations: MutationTree<state> = {
-  [types.FETCH_BOTTLES](state: state, measurements: MeasurementView[]) {
-    measurements.forEach(measurement => {
-      state.measurements[measurement.id] = measurement
-    })
-  },
-
-  [types.FETCH_BOTTLE](state: state, measurement: MeasurementView) {
-    state.measurements[measurement.id] = {
-      ...state.measurements[measurement.id],
-      ...measurement,
-    }
-
-    state.currentMeasurementId = measurement.id
+  [types.FETCH_MEASUREMENTS](state: state, measurements: MeasurementView[]) {
+    state.measurements = [...state.measurements, ...measurements]
   },
 
   [types.STORE_MEASUREMENT](state: state, measurement: MeasurementView) {
-    state.measurements[measurement.id] = measurement
-    state.currentMeasurementId = measurement.id
+    state.measurements = [...state.measurements, measurement]
   },
 }
 
 export const actions: ActionTree<state, state> = {
-  async fetchMyMeasurements({ commit }, options: IQueryOptions = {}) {
+  async fetchMeasurements({ commit }, options: IQueryOptions = {}) {
     const query = getQuery(options)
     const {
       data: measurements,
     }: { data: MeasurementView[] } = await this.$axios.get(
       `measurements${query}`,
     )
-    commit(types.FETCH_BOTTLES, measurements)
+    commit(types.FETCH_MEASUREMENTS, measurements)
     return measurements
   },
 
-  async fetchMeasurement({ commit }, id) {
-    const {
-      data: measurement,
-    }: { data: MeasurementView } = await this.$axios.get(`measurements/${id}`)
-    commit(types.FETCH_BOTTLE, measurement)
-    return measurement
-  },
-
   async storeMeasurement({ commit }, measurement: MeasurementCreate) {
-    const { log } = console
-    log(measurement)
     const { data }: { data: MeasurementView } = await this.$axios.post(
       'measurements',
       {
