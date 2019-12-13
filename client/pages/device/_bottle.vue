@@ -90,15 +90,7 @@ export default class DevicePage extends Vue {
       {
         label: '',
         backgroundColor: '#6574CD',
-        data: [
-          this.getRandomInt(),
-          this.getRandomInt(),
-          this.getRandomInt(),
-          this.getRandomInt(),
-          this.getRandomInt(),
-          this.getRandomInt(),
-          this.getRandomInt(),
-        ],
+        data: [],
       },
     ],
   }
@@ -112,7 +104,7 @@ export default class DevicePage extends Vue {
   }
 
   getRandomInt() {
-    return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    return Math.floor(Math.random() * (5000 - 5 + 1)) + 5
   }
 }
 </script>
