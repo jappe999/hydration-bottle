@@ -37,8 +37,8 @@ export default class DevicePage extends Vue {
   async mounted() {
     const bottle = await this.fetchBottle(this.$route.params.bottle)
     const server = await connect(bottle.code)
-    watch(0x181d, 0x2a98, e => {
-      const weight = e.target.value.getUInt8(0) * 10
+    await watch(0x181d, 0x2a98, e => {
+      const weight = e.target.value.getUint8(0) * 10
       this.storeMeasurement({ bottleId: bottle.id, weight })
     })
   }

@@ -6,6 +6,7 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { BottlesModule } from './bottles/bottles.module'
+import { MeasurementsModule } from './measurements/measurements.module'
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { BottlesModule } from './bottles/bottles.module'
     }),
     UsersModule,
     AuthModule,
-    BottlesModule
+    BottlesModule,
+    MeasurementsModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

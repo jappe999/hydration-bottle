@@ -5,7 +5,11 @@ export class MeasurementCreateDto {
   @IsNotEmpty()
   weight!: number
 
-  bottle?: Bottle
+  @IsNotEmpty()
+  bottleId!: string
+
+  @IsNotEmpty()
+  timestamp!: string
 }
 
 export class MeasurementViewDto {
@@ -14,6 +18,9 @@ export class MeasurementViewDto {
 
   @IsNotEmpty()
   weight!: number
+
+  @IsNotEmpty()
+  bottle!: Bottle
 }
 
 export class MeasurementUpdateDto extends MeasurementViewDto {}

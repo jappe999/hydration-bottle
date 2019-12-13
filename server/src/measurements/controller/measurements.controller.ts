@@ -20,7 +20,7 @@ export class MeasurementsController {
    * @param measurement - The measurement to add
    */
   @UseGuards(AuthGuard('jwt'))
-  @Post()
+  @Post('')
   create(@Body() measurement: MeasurementCreateDto) {
     return this.measurementsService.create(measurement)
   }
