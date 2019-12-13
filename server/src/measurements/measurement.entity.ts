@@ -9,6 +9,10 @@ export class Measurement {
   @Column()
   weight!: number
 
+
+  @Column()
+  timestamp!: number
+
   @ManyToOne(() => Bottle)
   bottle!: Bottle
 }

@@ -9,7 +9,7 @@ export class MeasurementCreateDto {
   bottleId!: string
 
   @IsNotEmpty()
-  timestamp!: string
+  timestamp!: number
 }
 
 export class MeasurementViewDto {
@@ -18,6 +18,9 @@ export class MeasurementViewDto {
 
   @IsNotEmpty()
   weight!: number
+
+  @IsNotEmpty()
+  timestamp!: number
 
   @IsNotEmpty()
   bottle!: Bottle
