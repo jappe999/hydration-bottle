@@ -89,15 +89,7 @@ export default class PageIndex extends Vue {
   ) => Promise<MeasurementView>
 
   mounted() {
-    this.fetchBottles().then(bottles =>
-      bottles.forEach(async bottle => {
-        const server = await connect(bottle.code)
-        watch(0x181d, 0x2a98, e => {
-          const weight = e.target.value.getUInt8(0) * 10
-          this.storeMeasurement({ bottleId: bottle.id, weight })
-        })
-      }),
-    )
+    this.fetchBottles()
   }
 
   toggleModal(state = null) {

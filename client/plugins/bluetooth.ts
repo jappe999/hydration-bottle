@@ -23,7 +23,7 @@ export const connect = async (code: string) => {
 }
 
 export const watch = (serviceUUID = 0x181d, characteristicUUID = 0x2a98, callback = (event) => null) => {
-    window.server.getPrimaryService(serviceUUID)
+    return window.server.getPrimaryService(serviceUUID)
         .then(service => {
             return service.getCharacteristic(characteristicUUID)
         })
@@ -33,5 +33,10 @@ export const watch = (serviceUUID = 0x181d, characteristicUUID = 0x2a98, callbac
                 'characteristicvaluechanged',
                 callback,
             )
+            return characteristic
         })
+}
+
+export const unwatch = (characteristic) => {
+    return characteristic.stopNotifications()
 }
