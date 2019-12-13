@@ -5,7 +5,7 @@
   Hydration Bottle
 </h1>
 <p align="center">
-  <i>Yet Another Cards Against Humanity App</i>
+  <i>Drink enough water!</i>
 </p>
 
 ## Build Setup
@@ -27,8 +27,6 @@ yarn start
 
 ## License
 
-Hydration Bottle is an online game based on, but not affiliated to, [Cards Against Humanity](https://cardsagainshumanity.com/).
+Hydration Bottle is an online platform for connecting and reading your smart water bottle. See [the pycom repository for more code](https://github.com/jappe999/hydration-bottle-pycom).
 
-The source of this game is licensed under the [GNU GENERAL PUBLIC LICENSE](https://github.com/jappe999/project-cards/blob/develop/LICENSE). Bug reports and contributions are welcome.
-
-The game concept and official card decks, created by Cards Against Humanity, are used under a [Creative Commons BY-NC-SA 2.0](https://creativecommons.org/licenses/by-nc-sa/2.0/) license.
+The source of this platform is licensed under the [GNU GENERAL PUBLIC LICENSE](https://github.com/jappe999/hydration-bottle/blob/develop/LICENSE). Bug reports and contributions are welcome.
