@@ -80,7 +80,10 @@ export const actions: ActionTree<state, state> = {
     log(measurement)
     const { data }: { data: MeasurementView } = await this.$axios.post(
       'measurements',
-      measurement,
+      {
+        ...measurement,
+        timestamp: Date.now(),
+      },
     )
     commit(types.STORE_MEASUREMENT, data)
     return data

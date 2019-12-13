@@ -5,12 +5,14 @@ export interface IMeasurement {
   bottleId: string
   weight: number
   bottleId?: string
+  timestamp: number
 }
 
 export class MeasurementCreate extends Model implements IMeasurement {
   bottleId!: string
   weight!: number
   bottleId?: string
+  timestamp!: number
 }
 
 export class MeasurementView extends Model implements IMeasurement {
@@ -18,4 +20,5 @@ export class MeasurementView extends Model implements IMeasurement {
   bottleId!: string
   weight!: number
   bottleId!: string
+  timestamp!: number
 }
