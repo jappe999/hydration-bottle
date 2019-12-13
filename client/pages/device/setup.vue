@@ -1,15 +1,12 @@
 <template>
-  <div class="w-full max-w-5xl flex flex-col justify-center items-center ">
+  <div class="w-full max-w-sm flex flex-col justify-center items-center ">
     <div class="w-full flex items-center my-4">
       <app-button-link to="/" bg="transparent">&larr; Back</app-button-link>
-      <h2 class="ml-6 text-2xl font-bold">
-        Set up a bottle
-      </h2>
     </div>
 
-    <div class="w-full flex -mx-2">
+    <div class="w-full max-w-sm flex -mx-2">
       <app-bottle-connect class="px-2" />
-      <app-bottle-setup class="px-2" />
+      <!-- <app-bottle-setup class="px-2" /> -->
     </div>
   </div>
 </template>

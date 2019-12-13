@@ -2,6 +2,9 @@
   <div class="w-full max-w-sm flex flex-col justify-center items-center">
     <app-card class="w-full">
       <app-card-content class="py-6">
+        <h2 class="text-2xl font-bold -mt-2 mb-4">
+          Set up a bottle
+        </h2>
         <div v-if="bottle.errors.any()" class="mb-4">
           <div
             v-for="[field, errors] in Object.entries(bottle.errors.all())"
