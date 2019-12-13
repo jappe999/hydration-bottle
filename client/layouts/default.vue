@@ -61,16 +61,6 @@
                       >Set up a device</nuxt-link
                     >
                   </li>
-                  <li class="w-full flex ">
-                    <nuxt-link
-                      to="/testing"
-                      class="w-full p-3 font-semibold bg-gray-800 hover:bg-gray-900 focus:bg-gray-900"
-                      :class="{
-                        'bg-gray-900': $route.path == '/testing',
-                      }"
-                      >chartstestsven</nuxt-link
-                    >
-                  </li>
                 </ul>
               </div>
 
