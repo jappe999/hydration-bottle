@@ -9,7 +9,7 @@ export class MeasurementsService {
   constructor(
     @InjectRepository(Measurement)
     private readonly measurementRepository: Repository<Measurement>,
-  ) {}
+  ) { }
 
   findMany(options?: FindManyOptions): Promise<Measurement[]> {
     return this.measurementRepository.find(options)

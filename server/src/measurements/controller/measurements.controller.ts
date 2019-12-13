@@ -39,6 +39,8 @@ export class MeasurementsController {
   @UseGuards(AuthGuard('jwt'))
   @Post('')
   create(@Body() measurement: MeasurementCreateDto) {
+    console.log(measurement);
+
     return this.measurementsService.create(measurement)
   }
 

@@ -5,7 +5,7 @@
       <small>{{ bottle.code }}</small>
     </div>
 
-    <app-card class="flex">
+    <app-card class="flex flex-col sm:flex-row items-center justify-center">
       <app-card-content class="text-center border-r border-gray-900">
         <h3 class="text-2xl font-bold">Times used in a week</h3>
         <line-chart class="p-8" :chart-data="dataCollection" />
@@ -94,7 +94,15 @@ export default class DevicePage extends Vue {
         {
           label: '',
           backgroundColor: '#6574CD',
-          data: this.measurements,
+          data: [
+            this.getRandomInt(),
+            this.getRandomInt(),
+            this.getRandomInt(),
+            this.getRandomInt(),
+            this.getRandomInt(),
+            this.getRandomInt(),
+            this.getRandomInt(),
+          ],
         },
       ],
     }

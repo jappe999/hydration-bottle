@@ -9,7 +9,6 @@ export class Measurement {
   @Column()
   weight!: number
 
-
   @Column()
   timestamp!: number
 
