@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="flex">
     <line-chart class="p-8"
       :chart-data="datacollection"
@@ -7,6 +8,10 @@
       :chart-data="datatoday"
       :options="options"/>
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="fillData()">Randomize</button>
+  </div>
+  <div>
+      <img id="flesmeter" src="~/static/flessen/100fles.svg" alt="" srcset="">
+  </div>
   </div>
 </template>
 
