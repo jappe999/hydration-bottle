@@ -36,19 +36,26 @@ export const mutations: MutationTree<state> = {
     bottles.forEach(bottle => {
       state.bottles[bottle.id] = bottle
     })
+    state.bottles = { ...state.bottles }
   },
 
   [types.FETCH_BOTTLE](state: state, bottle: BottleView) {
-    state.bottles[bottle.id] = {
-      ...state.bottles[bottle.id],
-      ...bottle
+    state.bottles = {
+      ...state.bottles,
+      [bottle.id]: {
+        ...state.bottles[bottle.id],
+        ...bottle
+      }
     }
 
     state.currentBottleId = bottle.id
   },
 
   [types.ADD_BOTTLE](state: state, bottle: BottleView) {
-    state.bottles[bottle.id] = bottle
+    state.bottles = {
+      ...state.bottles,
+      [bottle.id]: bottle
+    }
     state.currentBottleId = bottle.id
   },
 

@@ -16,6 +16,8 @@ import { Component, Vue } from 'vue-property-decorator'
 import { Action, Getter } from 'vuex-class'
 import { BottleView } from '~/models/Bottle'
 import * as types from '~/store/mutation-types'
+import { MeasurementCreate, MeasurementView } from '~/models/Measurement'
+import { connect, watch } from '../../plugins/bluetooth'
 
 @Component({
   components: {
@@ -28,8 +30,17 @@ export default class DevicePage extends Vue {
 
   @Action('bottles/fetchBottle') fetchBottle: (id: string) => BottleView
 
-  mounted() {
-    this.fetchBottle(this.$route.params.bottle)
+  @Action('measurements/storeMeasurement') storeMeasurement: (
+    measurement: MeasurementCreate,
+  ) => Promise<MeasurementView>
+
+  async mounted() {
+    const bottle = await this.fetchBottle(this.$route.params.bottle)
+    const server = await connect(bottle.code)
+    watch(0x181d, 0x2a98, e => {
+      const weight = e.target.value.getUInt8(0) * 10
+      this.storeMeasurement({ bottleId: bottle.id, weight })
+    })
   }
 }
 </script>
